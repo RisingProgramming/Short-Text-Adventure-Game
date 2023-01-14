@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(void) {
+    char input[10];
+    int score = 0;
+    int lives = 3;
+    int has_sword = 0;
+    int has_key = 0;
+
+    printf("Welcome to the text adventure game!\n");
+    printf("You find yourself in a castle, surrounded by ancient stone walls.\n");
+    printf("You are on a mission to defeat the evil sorcerer who resides in the castle.\n");
+    printf("You see a door to the north and a staircase leading down to the east.\n");
+    printf("Which path do you take?\n");
+    printf("Enter 'north' to go north or 'east' to go east.\n");
+    scanf("%s", input);
+
+    // First choice: north or east
+    if (strcmp(input, "north") == 0) {
+        printf("\nYou decided to take the door to the north.\n");
+        printf("You find yourself in a room with a locked chest in the corner.\n");
+        if (!has_key) {
+            printf("The chest is locked. Do you want to search the room for a key?\n");
+            printf("Enter 'yes' to search or 'no' to leave the chest locked.\n");
+            scanf("%s", input);
+            if (strcmp(input, "yes") == 0) {
+                printf("\nYou searched the room and found a key!\n");
+                has_key = 1;
+            } else {
+                printf("\nYou decided to leave the chest locked.\n");
+            }
+        }
+        if (has_key) {
+            printf("\nThe chest is now unlocked. Do you want to open it?\n");
+            printf("Enter 'yes' to open the chest or 'no' to leave it closed.\n");
+            scanf("%s", input);
+            if (strcmp(input, "yes") == 0) {
+                printf("\nYou opened the chest and found a sword!\n");
+                has_sword = 1;
+                score += 50;
+                printf("You earned 50 points!\n");
+            } else {
+                printf("\nYou decided to leave the chest closed.\n");
+            }
+        }
+    } else if (strcmp(input, "east") == 0) {
+        printf("\nYou decided to take the staircase to the east.\n");
+        printf("You find yourself in a dark and damp dungeon.\n");
+        printf("Do you want to explore the dungeon?\n");
+        printf("Enter 'yes' to explore or 'no' to return to the main hall.\n");
+        scanf("%s", input);
+        if (strcmp(input, "yes") == 0) {
+            printf("\nYou decided to explore the dungeon.\n");
+            printf("You hear a noise coming from one of the cells.\n");
+            printf("Do you want to investigate?\n");
+            printf("Enter 'yes' to investigate or 'no' to ignore it.\n");
+            scanf("%s", input);
+            if (strcmp(input, "yes") == 0) {
+                printf("\nYou decided to investigate the noise.\n");
+                printf("You find a prisoner who tells you that the sorcerer's lair is on the top floor of the castle.\n");
+                printf("He also tells you that there's a secret passage that leads to the top floor.\n");
+                score += 25;
+                printf("You earned 25 points for finding useful information!\n");
+            } else {
+                printf("\nYou decided to ignore the noise.\n");
+            }
+        } else {
+            printf("\nYou decided to return to the main hall.\n");
+        }
+    }
+    // Second choice: fight or sneak
+    printf("\nYou continue your journey through the castle.\n");
+    printf("You come across a guard blocking the path to the top floor.\n");
+    printf("Do you want to fight the guard or try to sneak past him?\n");
+    printf("Enter 'fight' to fight or 'sneak' to sneak past.\n");
+    scanf("%s", input);
+    if (strcmp(input, "fight") == 0) {
+        if (has_sword) {
+            printf("\nYou decided to fight the guard.\n");
+            printf("With your sword, you were able to defeat the guard and continue on your journey.\n");
+            score += 50;
+            printf("You earned 50 points!\n");
+        } else {
+            printf("\nYou decided to fight the guard without a weapon.\n");
+            printf("The guard easily overpowered you and took you as a prisoner.\n");
+            lives -= 1;
+            if (lives > 0) {
+                printf("\nYou have %d lives left. Be more careful next time!\n", lives);
+            } else {
+                printf("\nYou have no lives left. Game over!\n");
+                return 0;
+            }
+        }
+    } else if (strcmp(input, "sneak") == 0) {
+        printf("\nYou decided to try and sneak past the guard.\n");
+        int sneak_success = rand() % 2; // randomly decide if sneaking is successful or not
+        if (sneak_success) {
+            printf("\nYou were able to sneak past the guard and continue on your journey.\n");
+            score += 25;
+            printf("You earned 25 points!\n");
+        } else {
+            printf("\nThe guard caught you trying to sneak past.\n");
+            lives -= 1;
+            if (lives > 0) {
+                printf("\nYou have %d lives left. Be more careful next time!\n", lives);
+            } else {
+                printf("\nYou have no lives left. Game over!\n");
+                return 0;
+            }
+        }
+    }
+
+    printf("\nYou made it to the top floor and find the sorcerer's lair.\n");
+    printf("The sorcerer starts to cast a spell. Do you want to try and interrupt the spell?\n");
+    printf("Enter 'yes' to interrupt the spell or 'no' to wait for the sorcerer to finish.\n");
+    scanf("%s", input);
+
+    if (strcmp(input, "yes") == 0) {
+        printf("\nYou decided to interrupt the spell.\n");
+        int interrupt_success = rand() % 2;
+        if (interrupt_success) {
+            printf("\nYou were able to interrupt the sorcerer's spell and defeat him!\n");
+            printf("Congratulations! You have successfully completed the mission and saved the kingdom!\n");
+            score += 100;
+            printf("You earned 100 points for defeating the sorcerer!\n");
+        } else {
+            printf("\nYour attempt to interrupt the spell failed and the sorcerer's magic was too powerful.\n");
+            lives -= 1;
+            if (lives > 0) {
+                printf("\nYou have %d lives left. Try again!\n", lives);
+            } else {
+                printf("\nYou have no lives left. Game over!\n");
+                return 0;
+            }
+        }
+    } else if (strcmp(input, "no") == 0) {
+        printf("\nYou decided to wait for the sorcerer to finish his spell.\n");
+        printf("The sorcerer's magic was too powerful for you to handle.\n");
+        lives -= 1;
+        if (lives > 0) {
+            printf("\nYou have %d lives left. Try again!\n", lives);
+        } else {
+            printf("\nYou have no lives left. Game over!\n");
+            return 0;
+        }
+    }
+
+    printf("\nYour final score is: %d\n", score);
+    printf("Thanks for playing the text adventure game!\n");
+    return 0;
+}
